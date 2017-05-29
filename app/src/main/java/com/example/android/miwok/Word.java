@@ -8,18 +8,19 @@ import android.content.Context;
 
 public class Word {
 
-    private String miwokTranslation;
-    private String englishTranslation;
+    private String mDefaultTranslation;
+    private String mMiwokTranslation;
 
-    public Word(Context context){
-        miwokTranslation="test";
-        englishTranslation="test2";
+
+    public Word(String defaultTranslation, String miwokTranslation){
+        mDefaultTranslation= defaultTranslation;
+        mMiwokTranslation= miwokTranslation;
     }
-    public String getEnglishTranslation(String text){
-        return englishTranslation=text;
+    public String getEnglishTranslation(){
+        return mDefaultTranslation;
     }
 
-    public String getMiwokTranslation(String text){
-        return miwokTranslation=text;
+    public String getMiwokTranslation(){
+        return mMiwokTranslation;
     }
 }

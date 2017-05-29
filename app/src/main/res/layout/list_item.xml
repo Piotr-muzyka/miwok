@@ -8,12 +8,10 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="testENG"
         android:id="@+id/text1"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="testMIWOK"
         android:id="@+id/text2"
         />
         <!--tools namespace allows to test a view without hardcoding a value to it -->

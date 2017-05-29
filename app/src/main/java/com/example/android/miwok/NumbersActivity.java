@@ -18,6 +18,7 @@ package com.example.android.miwok;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
@@ -28,16 +29,25 @@ public class NumbersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_numbers);
 
-        ArrayList<String> words = new ArrayList<String>();
-        words.add("test1");
-        words.add("test2");
-        words.add("test3");
-        words.add("test4");
-        words.add("test5");
-        words.add("test6");
+        // Create an ArrayList of AndroidFlavor objects
+        ArrayList<Word> words = new ArrayList<Word>();
+//        Word w = new Word("one","lutti");
+//        words.add(w);
 
-        ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(this,R.layout.list_item, words);
+        //more elegant way
+        words.add(new Word("test1","miwok2"));
+        words.add(new Word("test2","miwok3"));
 
+        // Create an {@link AndroidFlavorAdapter}, whose data source is a list of
+        // {@link AndroidFlavor}s. The adapter knows how to create list item views for each item
+        // in the list.
+        WordAdapter itemsAdapter = new WordAdapter(this, words);
+
+        // Get a reference to the ListView, and attach the adapter to the listView.
+        //Layout for the main screen -->
+        ListView listView = (ListView) findViewById(R.id.listview_word);
+
+        listView.setAdapter(itemsAdapter);
     }
 }
 
