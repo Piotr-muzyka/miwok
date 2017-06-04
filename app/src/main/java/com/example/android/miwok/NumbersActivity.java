@@ -15,26 +15,62 @@
  */
 package com.example.android.miwok;
 
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
-
+import android.media.AudioManager;
 import java.util.ArrayList;
-
-import static com.example.android.miwok.R.id.numbers;
-import static com.example.android.miwok.R.id.phrases;
 
 public class NumbersActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
+    private AudioManager am;
+
+    AudioManager.OnAudioFocusChangeListener afChangeListener =
+            new AudioManager.OnAudioFocusChangeListener() {
+
+                public void onAudioFocusChange(int focusChange) {
+                    if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+                        // Permanent loss of audio focus
+                        // Pause playback immediately
+                        releaseMediaPlayer();
+
+                    } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+                        // Pause playback
+                        mediaPlayer.pause();
+                        mediaPlayer.seekTo(0);
+                    } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+                        // Your app has been granted audio focus again
+                        // Raise volume to normal, restart playback if necessary
+                        mediaPlayer.start();
+                    }
+                }
+            };
+
+    private void releaseMediaPlayer() {
+        // If the media player is not null, then it may be currently playing a sound.
+        if (mediaPlayer != null) {
+            // Regardless of the current state of the media player, release its resources
+            // because we no longer need it.
+            mediaPlayer.release();
+
+            // Set the media player back to null. For our code, we've decided that
+            // setting the media player to null is an easy way to tell that the media player
+            // is not configured to play an audio file at the moment.
+            mediaPlayer = null;
+            am.abandonAudioFocus(afChangeListener);
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.word_list);
+        am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
 
         // Create an ArrayList of AndroidFlavor objects
         final ArrayList<Word> words = new ArrayList<Word>();
@@ -53,6 +89,8 @@ public class NumbersActivity extends AppCompatActivity {
         words.add(new Word("nine","wo’e", R.drawable.number_nine, R.raw.number_nine));
         words.add(new Word("ten","na’aacha", R.drawable.number_ten, R.raw.number_ten));
 
+        // Request audio focus for playback
+
 
         // Create an {@link AndroidFlavorAdapter}, whose data source is a list of
         // {@link AndroidFlavor}s. The adapter knows how to create list item views for each item
@@ -70,12 +108,6 @@ public class NumbersActivity extends AppCompatActivity {
 //                Log.d("ON ITEM CLICK...", " ON ITEM CLICK... "+ position + words.get(position).getMusicId());
                 Log.v("NumbersActivity", "Current word: " + words);
                 // here we are referencing a certain Word Object inside a ListView. We are referencing a method which returns songId
-                mediaPlayer = MediaPlayer.create(NumbersActivity.this, words.get(position).getMusicId());
-
-                //start the audio file
-                mediaPlayer.start();
-
-
             }
         });
     }

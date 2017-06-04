@@ -1,6 +1,7 @@
 package com.example.android.miwok;
 
 import android.app.Activity;
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -15,8 +16,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import static android.R.id.list;
-import static android.support.v4.content.ContextCompat.getColor;
+
 
 /**
  * Created by PiotrM on 29.05.2017.
@@ -79,11 +79,13 @@ public class WordAdapter extends ArrayAdapter<Word> {
         // set this text on the number TextView
         miwokTextView.setText(currentWord.getMiwokTranslation());
         int testColour = ContextCompat.getColor(getContext(), colour);
-        View textview = listItemView.findViewById(R.id.textview);
-        textview.setBackgroundColor(testColour);
+        View textView = listItemView.findViewById(R.id.text);
+        textView.setBackgroundColor(testColour);
 
+        ImageView playButton = (ImageView) listItemView.findViewById(R.id.imageView2);
         // Return the whole list item layout (containing 2 TextViews and an ImageView)
         // so that it can be shown in the ListView
+        playButton.setBackgroundColor(testColour);
 
 
         ImageView imageRepresentation = (ImageView) listItemView.findViewById(R.id.imageView);
