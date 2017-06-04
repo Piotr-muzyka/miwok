@@ -1,14 +1,22 @@
 package com.example.android.miwok;
 
 import android.app.Activity;
+import android.media.MediaPlayer;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import static android.R.id.list;
+import static android.support.v4.content.ContextCompat.getColor;
 
 /**
  * Created by PiotrM on 29.05.2017.
@@ -17,8 +25,8 @@ import java.util.ArrayList;
 public class WordAdapter extends ArrayAdapter<Word> {
 
     //private static final String LOG_TAG =WordAdapter.class.getSimpleName();
-
-
+    private int colour;
+    private MediaPlayer mediaPlayer;
     /**
      * This is our own custom constructor (it doesn't mirror a superclass constructor).
      * The context is used to inflate the layout file, and the list is the data we want
@@ -27,12 +35,13 @@ public class WordAdapter extends ArrayAdapter<Word> {
      * @param context        The current context. Used to inflate the layout file.
      * @param words A List of AndroidFlavor objects to display in a list
      */
-    public WordAdapter(Activity context, ArrayList<Word> words){
+    public WordAdapter(Activity context, ArrayList<Word> words, int mColour){
         // Here, we initialize the ArrayAdapter's internal storage for the context and the list.
         // the second argument is used when the ArrayAdapter is populating a single TextView.
         // Because this is a custom adapter for two TextViews and an ImageView, the adapter is not
         // going to use this second argument, so it can be any value. Here, we used 0.
         super(context,0, words);
+        colour = mColour;
     }
 
     /**
@@ -68,13 +77,28 @@ public class WordAdapter extends ArrayAdapter<Word> {
         TextView miwokTextView = (TextView) listItemView.findViewById(R.id.text2);
         // Get the version number from the current AndroidFlavor object and
         // set this text on the number TextView
-
         miwokTextView.setText(currentWord.getMiwokTranslation());
+        int testColour = ContextCompat.getColor(getContext(), colour);
+        View textview = listItemView.findViewById(R.id.textview);
+        textview.setBackgroundColor(testColour);
+
         // Return the whole list item layout (containing 2 TextViews and an ImageView)
         // so that it can be shown in the ListView
 
+
         ImageView imageRepresentation = (ImageView) listItemView.findViewById(R.id.imageView);
-        imageRepresentation.setImageResource(currentWord.getResourceId());
+        if(Word.hasAnImage==false){
+            imageRepresentation.setImageResource(currentWord.getResourceId());
+            imageRepresentation.setVisibility(View.GONE);
+        }
+        else
+        {
+            imageRepresentation.setImageResource(currentWord.getResourceId());
+            imageRepresentation.setVisibility(View.VISIBLE);
+        }
+
+
+
         return listItemView;
     }
 }
